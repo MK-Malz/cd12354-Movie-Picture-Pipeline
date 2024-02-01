@@ -1,1 +1,32 @@
-frontend-cd.yaml
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    # Same as in ci.yml
+
+  test:
+    # Same as in ci.yml
+
+  build:
+    needs: [lint, test]
+    # Same as in ci.yml, but add Docker build and push steps
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Kubernetes context
+      uses: azure/setup-kubectl@v1
+      # Use appropriate actions and steps for setting up kubectl with your cluster
+    - name: Apply Kubernetes manifests
+      run: kubectl apply -f ./path/to/your/manifests
+      # Make sure to replace the image tag in your manifests with the git SHA
+
